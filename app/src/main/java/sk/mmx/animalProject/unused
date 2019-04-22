@@ -1,0 +1,11 @@
+
+
+
+// zistit velkost obrazovky
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+
+        var width = displayMetrics.widthPixels
+        var height = displayMetrics.heightPixels
+
+        println("Width is $width and height is $height")
