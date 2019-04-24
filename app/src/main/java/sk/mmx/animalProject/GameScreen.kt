@@ -78,21 +78,18 @@ class GameScreen : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        println(v?.tag.toString())
+
+        disableButtons()
 
         val btnTag = v?.tag.toString()
         val firstAnimal = gameArray[0]
         val secondAnimal = gameArray[1]
         val thirdAnimal = gameArray[2]
 
-        mediaLength = mediaPlayer?.duration?.toLong()
-        mediaLength = mediaLength?.plus(300)
-
-        if (btnTag == "0" && rndAnimal == 0) {
+       if (btnTag == "0" && rndAnimal == 0) {
 
             buttonFirst?.setBackgroundResource(resources.getIdentifier("animal_$firstAnimal" + "_pass","drawable",packageName))
-
-            mediaPlayer?.start()
+            playSound("$firstAnimal")
             guessedArray.add(firstAnimal)
 
             Handler().postDelayed({
@@ -101,87 +98,50 @@ class GameScreen : AppCompatActivity(), View.OnClickListener {
 
         } else if (btnTag == "0" && rndAnimal != 0) {
             buttonFirst?.setBackgroundResource(
-                resources.getIdentifier(
-                    "animal_$firstAnimal" + "_fail",
-                    "drawable",
-                    packageName
-                )
-            )
+                resources.getIdentifier("animal_$firstAnimal" + "_fail","drawable",packageName))
+                 playSound("fail")
             Handler().postDelayed({
                 buttonFirst?.setBackgroundResource(
-                    resources.getIdentifier(
-                        "animal_$firstAnimal",
-                        "drawable",
-                        packageName
-                    )
-                )
+                    resources.getIdentifier("animal_$firstAnimal","drawable",packageName))
+                enableButtons()
             }, 1000)
         }
 
         if (btnTag == "1" && rndAnimal == 1) {
           buttonSecond?.setBackgroundResource(
-                resources.getIdentifier(
-                    "animal_$secondAnimal" + "_pass",
-                    "drawable",
-                    packageName
-                )
-            )
+            resources.getIdentifier("animal_$secondAnimal" + "_pass","drawable",packageName))
+            playSound("$secondAnimal")
 
-            mediaPlayer?.start()
             guessedArray.add(secondAnimal)
             Handler().postDelayed({
                 newScreen()
             }, mediaLength!!)
 
         } else if (btnTag == "1" && rndAnimal != 1) {
-            buttonSecond?.setBackgroundResource(
-                resources.getIdentifier(
-                    "animal_$secondAnimal" + "_fail",
-                    "drawable",
-                    packageName
-                )
-            )
+            buttonSecond?.setBackgroundResource(resources.getIdentifier("animal_$secondAnimal" + "_fail","drawable",packageName))
+            playSound("fail")
             Handler().postDelayed({
-                buttonSecond?.setBackgroundResource(
-                    resources.getIdentifier(
-                        "animal_$secondAnimal",
-                        "drawable",
-                        packageName
-                    )
-                )
+                buttonSecond?.setBackgroundResource(resources.getIdentifier("animal_$secondAnimal","drawable",packageName))
+                enableButtons()
             }, 1000)
         }
 
         if (btnTag == "2" && rndAnimal == 2) {
             buttonThird?.setBackgroundResource(
-                resources.getIdentifier(
-                    "animal_$thirdAnimal" + "_pass",
-                    "drawable",
-                    packageName
-                )
-            )
+            resources.getIdentifier("animal_$thirdAnimal" + "_pass","drawable",packageName))
+            playSound("$thirdAnimal")
 
-            mediaPlayer?.start()
             guessedArray.add(thirdAnimal)
             Handler().postDelayed({
                 newScreen()
             }, mediaLength!!)
         } else if (btnTag == "2" && rndAnimal != 2) {
-            buttonThird?.setBackgroundResource(
-                resources.getIdentifier(
-                    "animal_$thirdAnimal" + "_fail",
-                    "drawable",
-                    packageName
-                )
-            )
+            buttonThird?.setBackgroundResource(resources.getIdentifier("animal_$thirdAnimal" + "_fail","drawable",packageName))
+            playSound("fail")
+
             Handler().postDelayed({
-                buttonThird?.setBackgroundResource(
-                    resources.getIdentifier(
-                        "animal_$thirdAnimal",
-                        "drawable",
-                        packageName
-                    )
-                )
+                buttonThird?.setBackgroundResource(resources.getIdentifier("animal_$thirdAnimal","drawable",packageName))
+                enableButtons()
             }, 1000)
         }
     }
@@ -189,6 +149,8 @@ class GameScreen : AppCompatActivity(), View.OnClickListener {
     private fun newScreen() {
 
         //mediaPlayer?.stop()
+
+        enableButtons()
 
         if (guessedArray.size == gameArray.size) {
             val intent = Intent(this@GameScreen, MainActivity::class.java)
@@ -212,14 +174,38 @@ class GameScreen : AppCompatActivity(), View.OnClickListener {
 
             textAnimal?.text = gameArray[rndAnimal].capitalize()
 
-            val animalSound = gameArray[rndAnimal]
-            mediaPlayer = MediaPlayer.create(this, resources.getIdentifier("animal_$animalSound", "raw", packageName))
-
             buttonFirst?.setBackgroundResource(resources.getIdentifier("animal_$firstAnimal", "drawable", packageName))
             buttonSecond?.setBackgroundResource(resources.getIdentifier("animal_$secondAnimal", "drawable", packageName))
             buttonThird?.setBackgroundResource(resources.getIdentifier("animal_$thirdAnimal", "drawable", packageName))
         }
     }
+
+    private fun playSound (input: String) {
+
+        if (input == "fail") {
+            mediaPlayer = MediaPlayer.create(this, resources.getIdentifier(input, "raw", packageName))
+        } else {
+            mediaPlayer = MediaPlayer.create(this, resources.getIdentifier("animal_$input", "raw", packageName))
+            mediaLength = mediaPlayer?.duration?.toLong()
+            mediaLength = mediaLength?.plus(300)
+        }
+
+        mediaPlayer?.start()
+
+    }
+
+    private fun disableButtons() {
+        buttonFirst?.isClickable = false
+        buttonSecond?.isClickable = false
+        buttonThird?.isClickable = false
+    }
+
+    private fun enableButtons() {
+        buttonFirst?.isClickable = true
+        buttonSecond?.isClickable = true
+        buttonThird?.isClickable = true
+    }
+
 
     private fun enterFullScreen() {
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
