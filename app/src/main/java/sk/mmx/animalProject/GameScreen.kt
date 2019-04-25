@@ -5,14 +5,17 @@ import android.graphics.Typeface
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
+import android.speech.tts.TextToSpeech
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import java.util.*
 
 
-class GameScreen : AppCompatActivity(), View.OnClickListener {
+class GameScreen : AppCompatActivity(), View.OnClickListener, TextToSpeech.OnInitListener {
 
     private var buttonFirst: Button? = null
     private var buttonSecond: Button? = null
@@ -27,6 +30,21 @@ class GameScreen : AppCompatActivity(), View.OnClickListener {
 
     private var mediaPlayer: MediaPlayer? = null
     private var mediaLength: Long? = null
+
+    private var mTTS:TextToSpeech? = null
+
+
+    override fun onInit(status: Int) {
+        if (status == TextToSpeech.SUCCESS) {
+            mTTS!!.language = Locale.UK
+            mTTS!!.setSpeechRate(0.8F)
+            Log.i("TTS", "Succesfully initialised")
+            newScreen()
+         } else {
+            Log.e("TTS", "Not initialised")
+            newScreen()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,8 +67,10 @@ class GameScreen : AppCompatActivity(), View.OnClickListener {
         buttonSecond?.setOnClickListener(this)
         buttonThird?.setOnClickListener(this)
 
+        mTTS = TextToSpeech(this, this)
+
         imageViewClose.setOnClickListener {
-            val intent = Intent(this@GameScreen, MainActivity::class.java)
+               val intent = Intent(this@GameScreen, MainActivity::class.java)
             startActivity(intent)
         }
 
@@ -72,9 +92,6 @@ class GameScreen : AppCompatActivity(), View.OnClickListener {
                 gameArray = envForest.shuffled()
             }
         }
-
-        newScreen()
-
     }
 
     override fun onClick(v: View?) {
@@ -89,7 +106,7 @@ class GameScreen : AppCompatActivity(), View.OnClickListener {
        if (btnTag == "0" && rndAnimal == 0) {
 
             buttonFirst?.setBackgroundResource(resources.getIdentifier("animal_$firstAnimal" + "_pass","drawable",packageName))
-            playSound("$firstAnimal")
+            playSound(firstAnimal)
             guessedArray.add(firstAnimal)
 
             Handler().postDelayed({
@@ -110,7 +127,7 @@ class GameScreen : AppCompatActivity(), View.OnClickListener {
         if (btnTag == "1" && rndAnimal == 1) {
           buttonSecond?.setBackgroundResource(
             resources.getIdentifier("animal_$secondAnimal" + "_pass","drawable",packageName))
-            playSound("$secondAnimal")
+            playSound(secondAnimal)
 
             guessedArray.add(secondAnimal)
             Handler().postDelayed({
@@ -129,7 +146,7 @@ class GameScreen : AppCompatActivity(), View.OnClickListener {
         if (btnTag == "2" && rndAnimal == 2) {
             buttonThird?.setBackgroundResource(
             resources.getIdentifier("animal_$thirdAnimal" + "_pass","drawable",packageName))
-            playSound("$thirdAnimal")
+            playSound(thirdAnimal)
 
             guessedArray.add(thirdAnimal)
             Handler().postDelayed({
@@ -177,7 +194,18 @@ class GameScreen : AppCompatActivity(), View.OnClickListener {
             buttonFirst?.setBackgroundResource(resources.getIdentifier("animal_$firstAnimal", "drawable", packageName))
             buttonSecond?.setBackgroundResource(resources.getIdentifier("animal_$secondAnimal", "drawable", packageName))
             buttonThird?.setBackgroundResource(resources.getIdentifier("animal_$thirdAnimal", "drawable", packageName))
+
+            sayAnimal(gameArray[rndAnimal])
         }
+    }
+
+
+    private fun sayAnimal (toSpeak: String){
+
+        println(toSpeak)
+
+        mTTS!!.speak("Which animal is $toSpeak", TextToSpeech.QUEUE_FLUSH, null, "")
+
     }
 
     private fun playSound (input: String) {
@@ -208,6 +236,11 @@ class GameScreen : AppCompatActivity(), View.OnClickListener {
 
 
     private fun enterFullScreen() {
+
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
     }
+
+
+
+
 }
