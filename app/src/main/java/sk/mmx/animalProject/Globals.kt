@@ -1,5 +1,6 @@
 package sk.mmx.animalProject
 
+import android.view.View
 
 var environment = "default"
 
@@ -10,6 +11,7 @@ val envForest= listOf("bear","bee","boar","deer","eagle","fox","hedgehog","mole"
 
 
 const val sleepBetweenGuess:Long = 1
+
 
 
 

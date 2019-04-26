@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 
 class MainActivity : AppCompatActivity(), View.OnTouchListener {
 
@@ -25,6 +26,13 @@ class MainActivity : AppCompatActivity(), View.OnTouchListener {
         btnForest.setOnTouchListener(this)
         btnPolar.setOnTouchListener(this)
         btnSavana.setOnTouchListener(this)
+
+
+        val imageViewSettings = findViewById<ImageView>(R.id.imageViewSettings)
+        imageViewSettings.setOnClickListener {
+            val intent = Intent(this, SettingsScreen::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onResume() {

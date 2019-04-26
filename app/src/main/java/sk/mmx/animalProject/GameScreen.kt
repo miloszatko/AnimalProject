@@ -5,6 +5,7 @@ import android.graphics.Typeface
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
+import android.provider.MediaStore
 import android.speech.tts.TextToSpeech
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -70,8 +71,8 @@ class GameScreen : AppCompatActivity(), View.OnClickListener, TextToSpeech.OnIni
         mTTS = TextToSpeech(this, this)
 
         imageViewClose.setOnClickListener {
-               val intent = Intent(this@GameScreen, MainActivity::class.java)
-            startActivity(intent)
+               val intent = Intent(this, MainActivity::class.java)
+               startActivity(intent)
         }
 
         when (environment) {
@@ -236,11 +237,7 @@ class GameScreen : AppCompatActivity(), View.OnClickListener, TextToSpeech.OnIni
 
 
     private fun enterFullScreen() {
-
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
     }
-
-
-
 
 }

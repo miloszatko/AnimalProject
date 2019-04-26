@@ -45,5 +45,11 @@
             app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent"
             android:background="@drawable/btn_forest3x" android:layout_width="150dp" android:layout_height="150dp"
             android:tag="4" app:layout_constraintVertical_bias="0.6"/>
+    <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp" app:srcCompat="@drawable/btn_settings"
+            android:id="@+id/imageViewSettings"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp" android:layout_marginTop="16dp"
+            app:layout_constraintTop_toTopOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

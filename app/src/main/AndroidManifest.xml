@@ -17,9 +17,15 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="sk.mmx.animalProject.GameScreen"
+     <activity android:name="sk.mmx.animalProject.GameScreen"
                   android:screenOrientation="sensorLandscape">
         </activity>
+
+        <activity android:name="sk.mmx.animalProject.SettingsScreen"
+                  android:screenOrientation="sensorLandscape">
+        </activity>
+
+
     </application>
 
 </manifest>
